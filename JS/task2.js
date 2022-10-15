@@ -227,24 +227,29 @@
 
 
 // 11) створити функцію  яка скаладає значення елементів з однаковими індексами  та повертає новий результуючий масив ↓
-// function sum_index(dig)
-// {
+function sum_index(dig1 = [], dig2 = [])
+{
+    const new_mas = [];
+    let j=0
+    for(let i=0; i<dig1.length; i++)
+    {
+        if(i == j)
+        {
+           new_mas[i] = dig1[i] + dig2[j];
+        }  
+        j++;                                                     
+    }
 
-//     for(let i=0; i<dig.length; i++)
-//     {
-//         if()
-//         {
+    return console.log(new_mas);
+}
 
-//         }                                                          ??????
-//     }
+const mas1 = [2,7,12,1,5,7,8,9], mas2 = [5,2,9,2,12,4,1,8];
 
-    
-// }
+console.log(mas1);
+console.log(mas2)
+console.log('==============================');
 
-// const mas = [2,7,12,1,5,7,8,9];
-
-// console.log(mas);
-// sum_index(mas);
+sum_index(mas1,mas2);
 
 
 
