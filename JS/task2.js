@@ -251,8 +251,3 @@
 
 //sum_index(mas1,mas2);
 
-
-
-
-
-
