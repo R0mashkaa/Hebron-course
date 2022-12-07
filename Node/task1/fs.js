@@ -11,7 +11,7 @@ fs.readdir(PathToFileBoys)
     for(const string of NameOfFile)
     {
 
-        fs.readFile("./folder/Boys/" + string)
+        fs.readFile(PathToFileBoys + string)
         .then(NameOfFile =>
         {
             if(NameOfFile.toString() == "female")
@@ -44,7 +44,7 @@ fs.readdir(PathToFileGirls)
     for(const string of NameOfFile)
     {
 
-        fs.readFile("./folder/Girls/" + string)
+        fs.readFile(PathToFileGirls + string)
         .then(NameOfFile =>
         {
             if(NameOfFile.toString() == "male")
