@@ -1,72 +1,53 @@
 const fs = require('node:fs').promises;
+const pt = require('node:path');
 
-let PathToFileBoys = ("./folder/Boys/");
-let PathToFileGirls = ("./folder/Girls/");
+let PathToFileBoys = pt.join(__dirname,'folder/Boys');
+let PathToFileGirls = pt.join(__dirname,'folder/Girls');
 
-
-fs.readdir(PathToFileBoys)
-.then(NameOfFile =>
+function GenderSort(PathFrom, PathTo, gen)
 {
+    let PathToUnordinary = pt.join(__dirname,'folder/Unordinary');
 
-    for(const string of NameOfFile)
-    {
-
-        fs.readFile(PathToFileBoys + string)
+    gen = gen.toLowerCase();
+    
+    fs.readdir(PathFrom)
         .then(NameOfFile =>
         {
-            if(NameOfFile.toString() == "female")
+
+            for(const FileNamePointer of NameOfFile)
             {
-                fs.rename(PathToFileBoys+string, PathToFileGirls+string)  
+                
+                fs.readFile(pt.join(PathFrom, FileNamePointer))
+                    .then(NameOfGenderInFile =>
+                    {
+                        
+
+                        if(NameOfGenderInFile.toString() == gen)
+                        {
+                           fs.rename(pt.join(PathFrom, FileNamePointer), pt.join(PathTo, FileNamePointer));
+                        }
+                        else if(NameOfGenderInFile.toString() != "female" && NameOfGenderInFile.toString() != "male")
+                        {
+                            fs.rename(pt.join(PathFrom, FileNamePointer), pt.join(PathToUnordinary, FileNamePointer));
+                        }
+
+                    })
+                    .catch(Error => console.log("Error 101"));
+        
             }
+        
         })
-        .catch(Error =>
-        {
-            console.log("Error");
-        })
+        .catch(Error => console.log("Error 202"));
 
-    }
-
-})
-
-.catch(Error =>
-{
-    console.log("Error");
-})
-
-console.log("Successful, all found girls goes to \'Girls\' folder.");
+        console.log(`${gen} are sorted.`);
+}
 
 
 
-fs.readdir(PathToFileGirls)
-.then(NameOfFile =>
-{
 
-    for(const string of NameOfFile)
-    {
+GenderSort(PathToFileBoys, PathToFileGirls, "FeMaLe");
+GenderSort(PathToFileGirls, PathToFileBoys, "male");
 
-        fs.readFile(PathToFileGirls + string)
-        .then(NameOfFile =>
-        {
-            if(NameOfFile.toString() == "male")
-            {
-                fs.rename(PathToFileGirls+string, PathToFileBoys+string)  
-            }
-        })
-        .catch(Error =>
-        {
-            console.log("Error");
-        })
-
-    }
-
-})
-
-.catch(Error =>
-{
-    console.log("Error");
-})
-
-console.log("Successful, all found boys goes to \'Boys\' folder.");
 
 
 
