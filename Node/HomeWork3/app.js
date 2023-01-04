@@ -14,7 +14,9 @@ const app = express();
 
 mongoose.set('debug', true);
 mongoose.set('strictQuery', true);
-mongoose.connect(MONGO_URL);
+mongoose.connect(MONGO_URL)
+.then(()=> {console.log('Connected')})
+.catch((e)=> {console.log(e)})
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
