@@ -1,47 +1,42 @@
 const fs = require('node:fs/promises');
 const path = require('node:path');
 
- const User = require('../../dataBase/User');
-
+const User = require('../../dataBase/User');
 
 module.exports = {
 
   getSingleUser: async (userId) => {
-     return User.findById(userId);
-  
+    return User.findById(userId);
   },
 
- 
   getAllUsers: async () => {
-     return User.find();
+    return User.find();
   },
 
+  findUserByParams: (searchObject) => {
+    return User.findOne(searchObject);
+  },
   
-  updateUser: async (userId, newUserObject) => {
-    const users = await module.exports.getAllUsers();
-
-    const index = users.findIndex(user => user.id === Number(userId));
-
-    users[index] = { id: Number(userId), ...newUserObject };
-
-    await fs.writeFile(usersPath, JSON.stringify(users));
-
-    const updatedUser = await module.exports.getSingleUser(userId);
-
-    return updatedUser;
+  updateUser: async (req, res) => {
+    try {
+      const updatedUser = await userService.updateUser(req.params.userId, req.body);
+      res.json(updatedUser);
+    } catch (e) {
+      console.log(e);
+    }
   },
 
-  deleteUserById: async (userId) => {
-    const users = await module.exports.getAllUsers();
+  deleteUser: async (req, res, next) => {
+    try {
+      await userService.deleteUserById(req.params.userId);
 
-    const index = users.findIndex(user => user.id === Number(userId));
-
-    users.splice(index, 1);
-
-    await fs.writeFile(usersPath, JSON.stringify(users));
+      res.status(204).end();
+    } catch (e) {
+      next(e);
+    }
   },
 
   createUser: async (userObject) => {
-     return User.create(userObject);
+    return User.create(userObject);
   }
 };

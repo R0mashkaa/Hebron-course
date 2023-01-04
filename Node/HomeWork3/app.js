@@ -27,7 +27,7 @@ app.use('*', notFoundError);
 app.use(mainErrorHandler);
 
 app.listen(PORT, () => {
-  console.log('Listen', PORT);
+  console.log('Started on port: ', PORT);
 });
 
 function notFoundError(req, res, next) {

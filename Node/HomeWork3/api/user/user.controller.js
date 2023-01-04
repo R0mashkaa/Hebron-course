@@ -23,16 +23,16 @@ module.exports = {
     }
   },
 
-  updateUser: async (req, res, next) => {
+  updateUser : async (req, res, next) => {
     try {
       const { userId } = req.params;
       const result = await services.updateById(userId, req.body);
   
       if (!result) {
-        throw new NOT_FOUND(`User ${userId} is not found`);
+        throw new NotFound(`User not found`);
       }
   
-      res.json("User updated");
+      res.json()
     } catch (e) {
       next(e);
     }
