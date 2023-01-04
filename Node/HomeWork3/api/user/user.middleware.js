@@ -1,30 +1,48 @@
 const userService = require("./user.service");
-const { NotFound } = require("../../errors/ApiError");
+const { NotFound, BadRequest } = require("../../errors/ApiError");
 
 module.exports = {
-  checkIsUserExists: async (req, res, next) => {
+  
+  isInfoExist: async (req, res, next) => {
     try {
+      
       const user = await userService.getSingleUser(req.params.userId);
 
-      
       if (!user) {
         throw new NotFound('User not found');
       }
-
       req.user = user;
-
+      
       next();
     } catch (e) {
       next(e);
     }
   },
 
-  checkIsValideEmail:  async (req, res, next) => {
+  checkIsValidInfo:  async (req, res, next) => {
     try {
       const users = await userService.getAllUsers;
+   
+      const password = req.body.password.toString();
+      const email = req.body.email.toString();
+      const age = req.body.age;
 
-          
-     
+
+      if(password.length <= 8){ 
+        throw new BadRequest("Bad password entered!");
+      }
+
+
+      const validSymbols =  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    
+      if(!email.match(validSymbols)){
+        throw new BadRequest("Bad email");
+      }
+
+
+      if(age < 1 || age > 99){
+        throw new BadRequest(`Error. Your age is ${age}?`);
+      }
 
       req.users = users;
 
@@ -32,7 +50,7 @@ module.exports = {
     } catch (e) {
       next(e);
     }
-  }
+  },
 
 
 

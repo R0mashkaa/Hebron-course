@@ -1,10 +1,8 @@
 const userService = require("./user.service");
 
 module.exports = {
-  getAllUsers: async (req, res) => {
-    const allUsers = await userService.getAllUsers();
-
-    res.json(allUsers);
+  getAllUsers: (req, res) => {
+    res.json([]);
   },
 
   createUser: async (req, res, next) => {
@@ -25,23 +23,22 @@ module.exports = {
     }
   },
 
-  updateUser: async (req, res) => {
+  updateUser: async (req, res, next) => {
     try {
-      const updatedUser = await userService.updateUser(req.params.userId, req.body);
-
-      res.json(updatedUser);
-    } catch (e) {
-      console.log(e);
-    }
-  },
-
-  deleteUser: async (req, res, next) => {
-    try {
-      await userService.deleteUserById(req.params.userId);
-
-      res.status(204).end();
+      const { userId } = req.params;
+      const result = await services.updateById(userId, req.body);
+  
+      if (!result) {
+        throw new NOT_FOUND(`User ${userId} is not found`);
+      }
+  
+      res.json("User updated");
     } catch (e) {
       next(e);
     }
+  },
+
+  deleteUser: (req, res) => {
+    res.status(204).end('User was deleted');
   }
 };

@@ -18,6 +18,7 @@ mongoose.connect(MONGO_URL)
 .then(()=> {console.log('Connected')})
 .catch((e)=> {console.log(e)})
 
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
@@ -33,8 +34,6 @@ function notFoundError(req, res, next) {
   next(new NotFound('Route not found'));
 }
 
-
-// eslint-disable-next-line
 function mainErrorHandler(err, req, res, next) {
   res
     .status(err.status || SERVER_ERROR)

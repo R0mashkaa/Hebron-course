@@ -1,22 +1,22 @@
 const fs = require('node:fs/promises');
 const path = require('node:path');
 
-// const User = require('../../dataBase/User');
+ const User = require('../../dataBase/User');
 
-const usersPath = path.join(global.rootPath, 'dataBase', 'users.json');
 
 module.exports = {
 
   getSingleUser: async (userId) => {
-    return User.findById(userId);
+     return User.findById(userId);
+  
   },
 
-
+ 
   getAllUsers: async () => {
-    return User.find();
+     return User.find();
   },
 
-
+  
   updateUser: async (userId, newUserObject) => {
     const users = await module.exports.getAllUsers();
 
@@ -42,6 +42,6 @@ module.exports = {
   },
 
   createUser: async (userObject) => {
-      return User.create(userObject)
+     return User.create(userObject);
   }
 };
