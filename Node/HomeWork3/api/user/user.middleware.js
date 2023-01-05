@@ -30,11 +30,11 @@ module.exports = {
       const validSymbols =  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     
       if(!email.match(validSymbols)){
-        throw new BadRequest("Bad email");
+        throw new BadRequest("Invalid email symbols");
       }
 
       if(password.length <= 8){ 
-        throw new BadRequest("Bad password entered!");
+        throw new BadRequest("Poor password entered!");
       }
 
       if(age < 1 || age > 99){
