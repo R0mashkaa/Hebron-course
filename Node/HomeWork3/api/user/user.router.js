@@ -10,7 +10,7 @@ userRouter.use('/:userId', mdlwr.checkIsValidInfo, mdlwr.isInfoExist);
 
 userRouter.get('/:userId', controller.getUserById);
 userRouter.put('/:userId', mdlwr.checkIsValidInfo, controller.updateUser);
-userRouter.delete('/:userId', controller.RemoveUser);
+userRouter.delete('/:userId', controller.deleteUser);
 
 
 module.exports = userRouter;

@@ -5,24 +5,28 @@ const User = require('../../dataBase/User');
 
 module.exports = {
 
-  getSingleUser: async (userId) => {
-    return User.findById(userId);
-  },
-
   getAllUsers: async () => {
-    return User.find();
+    return await User.find();
+  },
+  
+  getSingleUser: async (userId) => {
+    return User.findBy(userId);
   },
 
   findUserByParams: (searchObject) => {
     return User.findOne(searchObject);
   },
+
+  findUserByEmail: (email) => {
+    return User.find({email});
+  },
   
-  updateUser: async (userId, newUserData) => {
-    return User.findByIdAndUpdate(userId, newUserData);
+  updateUser: async (userId, userNewData) => {
+    return User.findByIdAndUpdate(userId, userNewData)
   },
 
-  deleteUserById: async (userId) => {
-    return User.findByIdAndRemove(userId);
+  deleteUser: async (userId) => {
+    return  User.findByIdAndRemove(userId);
   },
 
   createUser: async (userObject) => {
