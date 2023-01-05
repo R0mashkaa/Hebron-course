@@ -38,14 +38,13 @@ module.exports = {
     }
   },
 
-  deleteUser: async(req, res) => {
+  RemoveUser: async(req, res) => {
     try {
-      await userService.deleteUserById(req.params.userId);
+      await userService.RemoveUserById(req.params.userId);
 
       res.status(204).end('User was deleted');
     } catch (e) {
       next(e);
     }
-   
   }
 };
