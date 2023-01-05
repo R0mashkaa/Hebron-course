@@ -1,5 +1,6 @@
 const userService = require("./user.service");
 const { NotFound, BadRequest, Conflict } = require("../../errors/ApiError");
+const User = require("../../dataBase/User");
 
 module.exports = {
   
@@ -32,7 +33,7 @@ module.exports = {
       if(!email.match(validSymbols)){
         throw new BadRequest("Invalid email symbols");
       }
-
+    
       if(password.length <= 8){ 
         throw new BadRequest("Poor password entered!");
       }
@@ -48,4 +49,21 @@ module.exports = {
       next(e);
     }
   },
+
+  checkIsValidEmail: async (req, res, next) => {
+    try {
+      
+    const { email } = req.body
+    const candidate = await User.findOne({email})
+
+    if(candidate){
+      return res.status(409).json("This email used, try another one");
+    }
+
+    next();
+    } catch (e) {
+      next(e);
+    }
+  },
+
 };
