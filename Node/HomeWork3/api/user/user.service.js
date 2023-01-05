@@ -17,23 +17,12 @@ module.exports = {
     return User.findOne(searchObject);
   },
   
-  updateUser: async (req, res) => {
-    try {
-      const updatedUser = await userService.updateUser(req.params.userId, req.body);
-      res.json(updatedUser);
-    } catch (e) {
-      console.log(e);
-    }
+  updateUser: async (userId, newUserData) => {
+    return User.findByIdAndUpdate(userId, newUserData);
   },
 
-  deleteUser: async (req, res, next) => {
-    try {
-      await userService.deleteUserById(req.params.userId);
-
-      res.status(204).end();
-    } catch (e) {
-      next(e);
-    }
+  deleteUserById: async (userId) => {
+    return User.findByIdAndRemove(userId);
   },
 
   createUser: async (userObject) => {

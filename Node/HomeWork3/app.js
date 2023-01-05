@@ -15,7 +15,7 @@ const app = express();
 mongoose.set('debug', true);
 mongoose.set('strictQuery', true);
 mongoose.connect(MONGO_URL)
-.then(()=> {console.log('Connected')})
+.then(()=> {console.log('Connected to: ', MONGO_URL)})
 .catch((e)=> {console.log(e)})
 
 

@@ -32,13 +32,20 @@ module.exports = {
         throw new NotFound(`User not found`);
       }
   
-      res.json()
+      res.json(result)
     } catch (e) {
       next(e);
     }
   },
 
-  deleteUser: (req, res) => {
-    res.status(204).end('User was deleted');
+  deleteUser: async(req, res) => {
+    try {
+      await userService.deleteUserById(req.params.userId);
+
+      res.status(204).end('User was deleted');
+    } catch (e) {
+      next(e);
+    }
+   
   }
 };
