@@ -4,15 +4,16 @@ const User = require('../../dataBase/User');
 
 module.exports = {
   
-	isInfoExist: async (req, res, next) => {
+	cheksIsUserExsist: async (req, res, next) => {
 		try {
 			const user = await userService.getSingleUser(req.params.userId);
-
+	
 			if (!user) {
 				throw new NotFound('User not found');
 			}
+	
 			req.user = user;
-      
+	
 			next();
 		} catch (e) {
 			next(e);
@@ -48,6 +49,4 @@ module.exports = {
 			next(e);
 		}
 	},
-
-
 };

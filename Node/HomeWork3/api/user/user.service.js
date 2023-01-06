@@ -10,22 +10,22 @@ module.exports = {
 	},
   
 	getSingleUser: async (userId) => {
-		return await User.findOne(userId);
+		return await User.findById(userId);
 	},
 
 	findUserByParams: (searchObject) => {
 		return User.findOne(searchObject);
 	},
   
+	createUser: async (userObject) => {
+		return User.create(userObject);
+	},
+
 	updateUser: async (userId, userNewData) => {
 		return User.findByIdAndUpdate(userId, userNewData);
 	},
 
 	deleteUser: async (userId) => {
 		return  User.findByIdAndRemove(userId);
-	},
-
-	createUser: async (userObject) => {
-		return User.create(userObject);
 	}
 };

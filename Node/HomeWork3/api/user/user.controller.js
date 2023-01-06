@@ -13,7 +13,8 @@ module.exports = {
 
 	getUserById: async (req, res, next) => {
 		try {
-			const userById = await userService.getSingleUser();
+			const { userId } = req.params;
+			const userById = await userService.getSingleUser(userId);
 
 			res.json(userById);
 		} catch (e) {
