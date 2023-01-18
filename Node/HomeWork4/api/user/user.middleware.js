@@ -1,7 +1,7 @@
+/* eslint-disable indent */
 const userService = require('./user.service');
 const User = require('../../dataBase/User');
-const { newUserSchema } = require('./user.validator');
-const { EMAIL_REGEXP, LOGIN_REGEXP } = require('../../configs/regexp.enum');
+const { joiValidatorSchema } = require('./user.validator');
 const { NotFound, BadRequest, Conflict } = require('../../errors/ApiError');
 
 
@@ -26,7 +26,7 @@ module.exports = {
 
 	joiValidator: async (req, res, next) => {
 		try {
-			const { error } = newUserSchema.validate(req.body);
+			const { error } = joiValidatorSchema.validate(req.body);
 	
 			if(error){
 				throw new BadRequest(error);
@@ -38,41 +38,42 @@ module.exports = {
 		}
 	},
 	
-
-	checkIsValidInfo:  async (req, res, next) => {
+	isEmailAndLoginExsist:  async (req, res, next) => {
 		try {
 			const loginName = req.body?.loginName;
 			const email = req.body?.email;
-			const password = req.body?.password;
-			const age = req.body.age;
 
-			if(!email.match(EMAIL_REGEXP)){
-				throw new BadRequest('Invalid email symbols');
+            if(await User.findOne({email})){
+                throw new Conflict('This email used, try another one');
 			}
 
-			if(await User.findOne({email})){
-				throw new Conflict('This email used, try another one');
-			}
+            if(await User.findOne({loginName})){
+                throw new Conflict('This login used, try another one');
+            }
 
-			if(!loginName.match(LOGIN_REGEXP)){
-				throw new BadRequest('Invalid login symbols');
-			}
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
 
-			if(await User.findOne({loginName})){
-				throw new Conflict('This login used, try another one');
-			}
+	// Temporary broken ↓
+	// emailOrLoginAuthorizatino:  async (req, res, next) => {
+	// 	try {
+	// 		let dbField = 'loginName';
 
-			if(password.length <= 8){ 
-				throw new BadRequest('Poor password entered!');
-			}
+	// 		if(req.body.emailOrLogin.includes('@')) {
+	// 			dbField = 'email';
+	// 		}
 
-			if(age < 14 || age > 99){
-				throw new BadRequest(`Error. Your age is ${age}?`);
-			}
+	// 		User.findOne({
+	// 			[dbField]: req.body.emailOrLogin
+	// 		});
 
-			next();
-		} catch (e) {
-			next(e);
-		}
-	},
+
+    //         next();
+    //     } catch (e) {
+    //         next(e);
+    //     }
+    // },
 };
