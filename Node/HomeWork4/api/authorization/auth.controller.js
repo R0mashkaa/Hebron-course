@@ -3,7 +3,6 @@ const OAuthService = require('../../services/OAuth.service');
 const { NO_CONTENT } = require('../../errors/error.codes');
 
 module.exports = {
-
     userLogin: async (req, res, next) => {
         try {
             const user = req.locals.user;
@@ -32,7 +31,7 @@ module.exports = {
         }
     },
 
-    UserLogoutAllDevice: async (req, res, next) => {
+    userLogoutAllDevice: async (req, res, next) => {
         try {
             await service.deleteManyByParams({ user: req.user._id });
 
@@ -51,17 +50,15 @@ module.exports = {
             const updatedTokenPair = OAuthService.generateAccessTokenPair({ ...user });
 
             await service.createOauthPair({ ...updatedTokenPair, user: user._id });
-            res.json({ ...updatedTokenPair, user });
+            res.json({ 
+                ...updatedTokenPair,
+                user 
+            });
         } catch (e) {
             next(e);
         }
     },
-
 };
-
-
-
-
 
 
 

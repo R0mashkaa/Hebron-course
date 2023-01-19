@@ -2,7 +2,6 @@ const User = require('../../dataBase/User');
 const oauthService = require('../../services/OAuth.service');
 
 module.exports = {
-
     getAllUsers: async () => {
         return await User.find();
     },

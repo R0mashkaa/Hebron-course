@@ -1,7 +1,6 @@
 const userService = require('./user.service');
 const { CREATED, NO_CONTENT } = require('../../errors/error.codes');
 module.exports = {
-
     getMyProfile:  (req, res, next) => {
         try {
             res.json({
