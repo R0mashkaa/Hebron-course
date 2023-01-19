@@ -7,7 +7,7 @@ const Usermdlwr = require('./user.middleware');
 userRouter.get('/', controller.getAllUsers);
 userRouter.post('/', Usermdlwr.joiValidator, Usermdlwr.isEmailAndLoginExsist, controller.createUser);
 
-userRouter.get('/myProfile', authMdlw.validateTokenDynamically('accessToken'), controller.getMyProfile);
+userRouter.get('/myProfile', authMdlw.validateAccessToken, controller.getMyProfile);
 
 userRouter.use('/:userId', Usermdlwr.getUserDynamically('userId','params','_id'));
 userRouter.get('/:userId', controller.getUserById);

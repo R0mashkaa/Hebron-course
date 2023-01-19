@@ -5,17 +5,40 @@ const { Unauthorized } = require('../../errors/ApiError');
 
 module.exports = {
 
-    validateTokenDynamically: (tokenType) => async (req, res, next) => {
+    validateAccessToken: async (req, res, next) => {
         try {
-            const token = req.get('Authorization');
+            const accessToken = req.get('Authorization');
 			
-            if(!token){
+            if(!accessToken){
                 throw new Unauthorized('Token doesn`t exist');
             }
 			
-            OAuthService.validateToken(tokenType, token);
+            OAuthService.validateToken('accessToken', accessToken);
 
-            const tokenWithUser = await service.getByParams({ token });
+            const tokenWithUser = await service.getByParams({ accessToken });
+      
+            if (!tokenWithUser) {
+                throw new Unauthorized('Token is invalid');
+            }
+      
+            req.user = tokenWithUser.user;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    validateRefreshToken: async (req, res, next) => {
+        try {
+            const refreshToken = req.get('Authorization');
+			
+            if(!refreshToken){
+                throw new Unauthorized('Token doesn`t exist');
+            }
+			
+            OAuthService.validateToken('refreshToken', refreshToken);
+
+            const tokenWithUser = await service.getByParams({ refreshToken });
       
             if (!tokenWithUser) {
                 throw new Unauthorized('Token is invalid');
