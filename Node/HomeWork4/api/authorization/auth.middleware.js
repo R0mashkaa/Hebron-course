@@ -2,9 +2,7 @@ const OAuthService = require('../../services/OAuth.service');
 const service = require('./auth.service');
 const { Unauthorized } = require('../../errors/ApiError');
 
-
 module.exports = {
-
     validateAccessToken: async (req, res, next) => {
         try {
             const accessToken = req.get('Authorization');
@@ -51,5 +49,3 @@ module.exports = {
         }
     }
 };
-
-

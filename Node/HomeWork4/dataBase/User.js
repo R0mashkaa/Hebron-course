@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+const secureFields = [ 'password' ];
 
 const UserScheme = new mongoose.Schema({
     loginName: { type: String, trim: true, default: 'UnNamed' },
@@ -9,7 +10,27 @@ const UserScheme = new mongoose.Schema({
 },
 {
     timestamps: true,
-    versionKey: false
+    versionKey: false,
+    toJSON: {
+        virtuals: true,
+        transform: function(doc, ret) {
+            for (const field of secureFields) {
+                delete ret[field];
+            }
+	
+            return ret;
+        }
+    },
+    toObject: {
+        virtuals: true,
+        transform: function(doc, ret) {
+            for (const field of secureFields) {
+                delete ret[field];
+            }
+	
+            return ret;
+        }
+    }
 }
 );
 

@@ -1,7 +1,6 @@
 const OAuth = require('../../database/OAuth');
 
 module.exports = {
-
     createOauthPair: (tokenData) => {
         return OAuth.create(tokenData);
     },
