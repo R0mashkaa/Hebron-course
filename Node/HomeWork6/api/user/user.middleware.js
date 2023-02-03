@@ -1,22 +1,12 @@
 const userService = require('./user.service');
 const User = require('../../dataBase/User');
 const { joiValidatorSchema } = require('./user.validator');
+const { IMAGE_MAX_SIZE,  IMAGE_MIMETYPES } = require('../../configs/file.configs');
 const { NotFound, BadRequest, Conflict } = require('../../errors/ApiError');
 
 
+
 module.exports = {
-    accountConfirmation:  async (req, res, next) => {
-        try {
-            if(User.accountStatus === 'Not activated') {
-
-            }
-
-            next();
-        } catch (e) {
-            next(e);
-        }
-    },
-
     getUserDynamically: (paramName, from, dbField = paramName) => async (req, res, next) => {
         try {
             const searchData = req[from][paramName];
@@ -84,6 +74,28 @@ module.exports = {
             }
 
             req.locals = { ...req.locals, user };
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    checkUserAvatar: (req, res, next) => {
+        try {
+            if (!req.files?.avatar) {
+                throw new BadRequest('No file');
+            }
+
+            const { name, size, mimetype } = req.files.avatar;
+
+            if (size > IMAGE_MAX_SIZE) {
+                throw new BadRequest(`File ${name} is too big`);
+            }
+
+            if (!IMAGE_MIMETYPES.includes(mimetype)) {
+                throw new BadRequest('Not valid file type');
+            }
 
             next();
         } catch (e) {

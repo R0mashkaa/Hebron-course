@@ -13,6 +13,7 @@ userRouter.use('/:userId', Usermdlwr.getUserDynamically('userId','params','_id')
 userRouter.get('/:userId', controller.getUserById);
 userRouter.put('/:userId', Usermdlwr.isEmailAndLoginExsist, controller.updateUser);
 userRouter.delete('/:userId', controller.deleteUser);
+userRouter.post('/:userId/avatar', Usermdlwr.checkUserAvatar, controller.uploadUserAvatar);
 
 
 module.exports = userRouter;

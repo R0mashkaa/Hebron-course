@@ -34,9 +34,9 @@ module.exports = {
             if (!token) {
                 throw new Unauthorized('No token');
             }
-    
+            
             OAuthService.validateToken(actionType, token);
-    
+            
             const actionTokenWithUser = await service.getActionTokenByParams({ token, actionType });
     
             if (!actionTokenWithUser) {
@@ -49,5 +49,5 @@ module.exports = {
         } catch (e) {
             next(e);
         }
-    }
+    },
 };

@@ -1,6 +1,6 @@
 const userService = require('./user.service');
 const { CREATED, NO_CONTENT } = require('../../errors/error.codes');
-const { emailService } = require('../../services');
+const { emailService, fileService } = require('../../services');
 const { WELCOME } = require('../../configs/emailTypes.enum');
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
                 name: req.user.loginName
             };
 
-            await emailService.sendMail('tsugelroman1998@gmail.com', WELCOME, emailContext);
+            await emailService.sendMail(req.user.email, WELCOME, emailContext);
 
             res.json({
                 ...req.user.toObject(),
@@ -66,5 +66,17 @@ module.exports = {
         } catch (e) {
             next(e);
         }
+    },
+
+    uploadUserAvatar: async (req, res, next) => {
+        try {
+            const avatarLinkData = await fileService.uploadFileToS3(req.files.avatar, req.params.userId, 'user');
+            await userService.updateUser(req.params.userId, { avatarLink: avatarLinkData });
+
+            res.json(avatarLinkData);
+        } catch (e) {
+            next(e);
+        }
     }
+
 };

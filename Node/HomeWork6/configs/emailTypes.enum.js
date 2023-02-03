@@ -1,5 +1,5 @@
 module.exports = {
-    WELCOME: 'Welcome user',
+    WELCOME: 'Welcome to our platform',
     FORGOT_PASSWORD: 'Forgot password',
-    BANNED: 'Ban acc'
+    BANNED: 'Your account banned'
 };

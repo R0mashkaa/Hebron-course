@@ -40,7 +40,7 @@ const sendMail = (reciverEmail, emailType, context = {}) => {
     return transporter.sendMail({
         from: 'No reply',
         to: reciverEmail,
-        subject: 'Welcome',
+        subject: emailType,
         template: templateConfig.templateName,
         context
     });

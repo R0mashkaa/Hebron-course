@@ -16,7 +16,6 @@ module.exports = {
   
     createUser: async (userObject) => {
         const hashPassword = await OAuthService.hashPassword(userObject.password);
-
         return User.create({ ...userObject, password: hashPassword });
     },
 
