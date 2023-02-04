@@ -49,19 +49,28 @@ const generateActionToken = (actionType, encodeData = {}) => {
 
 const validateToken = (tokenType = '', tokenData = '') => {
     try{
-        // switch(tokenType) {
-        // case 'accessToken':
-        //     tokenType = ACCESS_TOKEH_SECRET;
-        //     break;
+        switch(tokenType) {
+        case 'accessToken':
+            tokenType = ACCESS_TOKEH_SECRET;
+            break;
 
-        // case 'refreshToken':
-        //     tokenType = REFRESH_TOKEH_SECRET;
-        //     break;
+        case 'refreshToken':
+            tokenType = REFRESH_TOKEH_SECRET;
+            break;
+        
+        case 'Forgot password':
+            tokenType = FORGOT_PASSWORD;
+            break;
+            
+        
+        case 'Confirm account':
+            tokenType = CONFIRM_ACCOUNT;
+            break;
+            
+        default:
+            throw new BadRequest('Wrong token type');
+        }
 
-        // default:
-        //     throw new BadRequest('Token type is invalid');
-        // }
-  
         return jwt.verify(tokenData, tokenType);
     }
     catch(e){
