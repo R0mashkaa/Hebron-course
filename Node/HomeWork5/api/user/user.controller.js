@@ -2,6 +2,7 @@ const userService = require('./user.service');
 const { CREATED, NO_CONTENT } = require('../../errors/error.codes');
 const { emailService, fileService } = require('../../services');
 const { WELCOME } = require('../../configs/emailTypes.enum');
+const { BadRequest } = require('../../errors/Apierror');
 
 module.exports = {
     getMyProfile: async (req, res, next) => {
@@ -78,6 +79,33 @@ module.exports = {
         } catch (e) {
             next(e);
         }
-    }
+    },
+
+    showAllUserAvatars: async (req, res, next) => {
+        try {
+            const avatars = await userService.getAvatarList({ user: req.params.userId });
+            res.json(avatars);
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    updateUserAvatar: async (req, res, next) => {
+        try {
+            const avatarId = req.get('avatarId');
+            const newAvatarLink = await userService.findAvatarById({ _id: avatarId });
+            
+            if (!avatarId) {
+                throw new BadRequest('avatar ID not found');
+            }
+
+            await userService.updateUser(req.params.userId, { actualAvatarLink: newAvatarLink.toString() });
+
+            res.json(`New avatar link is - ${newAvatarLink}`);
+        } catch (e) {
+            next(e);
+        }
+    },
+    
 
 };

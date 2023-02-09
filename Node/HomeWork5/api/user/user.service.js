@@ -32,4 +32,20 @@ module.exports = {
     addUserAvatar: async (photoLink, userId) => {
         return Avatar.create( {avatarLink: photoLink, user: userId });
     },
+
+    getAvatarList: async (userId) => {
+        const data = await Avatar.find(userId);
+        return data.map((avatar) => {
+            return {
+                'Link to avatar': avatar.avatarLink,
+                'ID of avatar': avatar.id
+            };
+        });
+    },
+
+    findAvatarById: async (avatarId) => {
+        const data = await Avatar.find(avatarId);
+        return data.map((avatar) => avatar.avatarLink );
+    },
+
 };
