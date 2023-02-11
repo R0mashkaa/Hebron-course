@@ -110,7 +110,6 @@ module.exports = {
             const { avatarId, userId } = req.params;
             const isImageEquals = await userService.isActualAvatarEquals({ _id: avatarId, }, { _id: userId });
 
-            console.log(isImageEquals);
             if (isImageEquals) {
                 await userService.updateUser(userId, { actualAvatarLink: '' });
             }
