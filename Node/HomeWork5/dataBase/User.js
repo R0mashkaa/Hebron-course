@@ -13,7 +13,7 @@ const UserScheme = new mongoose.Schema({
     age: { type: Number, default: '' },
     accountStatus: { type: String, default: 'Pending' },
     role: { type: String, enum: Object.values(rolesEnum), default: rolesEnum.USER },
-    actualAvatarLink: { type: String, default: 'https://cdn-icons-png.flaticon.com/512/1946/1946429.png' },
+    actualAvatarLink: { type: String, default: '' },
 },
 {
     timestamps: true,

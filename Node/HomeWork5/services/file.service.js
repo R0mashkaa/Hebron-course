@@ -27,6 +27,10 @@ async function uploadFileToS3(file, itemId, itemType) {
     return Key;
 }
 
+function deleteImageFromS3(Key) {
+    return S3.deleteObject({ Key, Bucket: S3_BUCKET }).promise();
+}
+
 function fileNameBuilder(file, itemId, itemType) {
     const extension = path.extname(file.name);
     
@@ -36,5 +40,6 @@ function fileNameBuilder(file, itemId, itemType) {
 
 module.exports = {
     uploadFileToS3,
+    deleteImageFromS3,
     fileNameBuilder,
 };

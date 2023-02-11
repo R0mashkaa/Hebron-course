@@ -1,18 +1,11 @@
 const userService = require('./user.service');
 const { CREATED, NO_CONTENT } = require('../../errors/error.codes');
-const { emailService, fileService } = require('../../services');
-const { WELCOME } = require('../../configs/emailTypes.enum');
+const { fileService } = require('../../services');
 const { BadRequest } = require('../../errors/Apierror');
 
 module.exports = {
     getMyProfile: async (req, res, next) => {
         try {
-            const emailContext = {
-                name: req.user.loginName
-            };
-
-            await emailService.sendMail(req.user.email, WELCOME, emailContext);
-
             res.json({
                 ...req.user.toObject(),
             });
@@ -69,18 +62,6 @@ module.exports = {
         }
     },
 
-    uploadUserAvatar: async (req, res, next) => {
-        try {
-            const avatarLinkData = await fileService.uploadFileToS3(req.files.avatar, req.params.userId, 'user');
-            await userService.addUserAvatar(avatarLinkData, req.params.userId);
-            await userService.updateUser(req.params.userId, { actualAvatarLink: avatarLinkData });
-
-            res.json(avatarLinkData);
-        } catch (e) {
-            next(e);
-        }
-    },
-
     showAllUserAvatars: async (req, res, next) => {
         try {
             const avatars = await userService.getAvatarList({ user: req.params.userId });
@@ -90,22 +71,52 @@ module.exports = {
         }
     },
 
+    uploadUserAvatar: async (req, res, next) => {
+        try {
+            const { userId } = req.params;
+            let avatarLinkData = await fileService.uploadFileToS3(req.files.avatar, userId, 'user');
+
+            avatarLinkData = 'https://rocket2proj.s3.us-east-1.amazonaws.com/' + avatarLinkData;
+            await userService.addUserAvatar(avatarLinkData, userId);
+            await userService.updateUser(userId, { actualAvatarLink: avatarLinkData });
+
+            res.json(avatarLinkData);
+        } catch (e) {
+            next(e);
+        }
+    },
+
     updateUserAvatar: async (req, res, next) => {
         try {
-            const avatarId = req.get('avatarId');
-            const newAvatarLink = await userService.findAvatarById({ _id: avatarId });
-            
+            const { avatarId, userId } = req.params;
+
             if (!avatarId) {
                 throw new BadRequest('avatar ID not found');
             }
 
-            await userService.updateUser(req.params.userId, { actualAvatarLink: newAvatarLink.toString() });
+            const newAvatarLink = await userService.findAvatarById({ _id: avatarId });
+            
+            await userService.updateUser( userId, { actualAvatarLink: newAvatarLink.toString() });
 
-            res.json(`New avatar link is - ${newAvatarLink}`);
+            res.json({ 'newLink': newAvatarLink } );
         } catch (e) {
             next(e);
         }
     },
     
+    deleteUserAvatar: async (req, res, next) => {
+        try {
+            const { avatarId, userId } = req.params;
+
+            await userService.deleteUserAvatar(avatarId);
+
+            const avatars = await userService.getAvatarList({ user: userId });
+            await userService.updateUser(userId, { actualAvatarLink: '' });
+
+            res.json(avatars);
+        } catch (e) {
+            next(e);
+        }
+    }
 
 };

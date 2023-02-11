@@ -1,6 +1,6 @@
 const User = require('../../dataBase/User');
 const Avatar = require('../../dataBase/userAvatar');
-const { OAuthService } = require('../../services');
+const { OAuthService, fileService } = require('../../services');
 
 module.exports = {
     getAllUsers: async () => {
@@ -29,18 +29,25 @@ module.exports = {
     },
 
 
-    addUserAvatar: async (photoLink, userId) => {
-        return Avatar.create( {avatarLink: photoLink, user: userId });
-    },
-
     getAvatarList: async (userId) => {
-        const data = await Avatar.find(userId);
+        const data = await Avatar.find(userId).sort({ updatedAt: -1 });
         return data.map((avatar) => {
             return {
                 'Link to avatar': avatar.avatarLink,
-                'ID of avatar': avatar.id
+                'ID of avatar': avatar.id,
+                'Added at': avatar.createdAt
             };
         });
+    },
+        
+    addUserAvatar: async (linkToAvatar, userId) => {
+        return Avatar.create( {avatarLink: linkToAvatar, user: userId });
+    },
+
+    deleteUserAvatar: async(avatarId) => {
+        const deletedItem = await Avatar.findByIdAndDelete(avatarId);
+
+        await fileService.deleteImageFromS3(deletedItem.avatarLink);
     },
 
     findAvatarById: async (avatarId) => {
