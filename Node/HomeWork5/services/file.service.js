@@ -27,7 +27,9 @@ async function uploadFileToS3(file, itemId, itemType) {
     return Key;
 }
 
+
 function deleteImageFromS3(Key) {
+    Key = Key.slice(47);
     return S3.deleteObject({ Key, Bucket: S3_BUCKET }).promise();
 }
 

@@ -62,6 +62,7 @@ module.exports = {
         }
     },
 
+
     showAllUserAvatars: async (req, res, next) => {
         try {
             const avatars = await userService.getAvatarList({ user: req.params.userId });
@@ -107,11 +108,16 @@ module.exports = {
     deleteUserAvatar: async (req, res, next) => {
         try {
             const { avatarId, userId } = req.params;
+            const isImageEquals = await userService.isActualAvatarEquals({ _id: avatarId, }, { _id: userId });
+
+            console.log(isImageEquals);
+            if (isImageEquals) {
+                await userService.updateUser(userId, { actualAvatarLink: '' });
+            }
 
             await userService.deleteUserAvatar(avatarId);
-
+            
             const avatars = await userService.getAvatarList({ user: userId });
-            await userService.updateUser(userId, { actualAvatarLink: '' });
 
             res.json(avatars);
         } catch (e) {

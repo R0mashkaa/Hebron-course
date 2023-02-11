@@ -52,7 +52,22 @@ module.exports = {
 
     findAvatarById: async (avatarId) => {
         const data = await Avatar.find(avatarId);
-        return data.map((avatar) => avatar.avatarLink );
+        return data.map( (avatar) => avatar.avatarLink );
     },
+
+    isActualAvatarEquals: async (avatarId, userId) => {
+        let imageLink = await Avatar.find(avatarId);
+        imageLink = imageLink.map((avatar) => avatar.avatarLink);
+        
+        let actualAvatarLink = await User.find(userId);
+        actualAvatarLink = actualAvatarLink.map((user) => user.actualAvatarLink); 
+  
+        if (imageLink.toString() === actualAvatarLink.toString()) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
 };
